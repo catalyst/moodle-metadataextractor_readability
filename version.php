@@ -17,7 +17,7 @@
 /**
  * Version details.
  *
- * @package    metadataextractor_readability
+ * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2020040701;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2019052003;        // Requires this Moodle version
-$plugin->component = 'metadataextractor_readability';        // Full name of the plugin (used for diagnostics)
+$plugin->component = 'metadataextractor_readable';        // Full name of the plugin (used for diagnostics)
 $plugin->maturity = MATURITY_ALPHA;
 
 $plugin->dependencies = array('tool_metadata' => 2020040201);

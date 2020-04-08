@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'metadataextractor_readability', language 'en'
+ * Strings for component 'metadataextractor_readable', language 'en'
  *
- * @package    metadataextractor_readability
+ * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

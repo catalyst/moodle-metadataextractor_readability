@@ -17,24 +17,24 @@
 /**
  * Class for calculating various readability scores.
  *
- * @package    metadataextractor_readability
+ * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace metadataextractor_readability;
+namespace metadataextractor_readable;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/vendor/autoload.php');
-require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/constants.php');
+require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readable/vendor/autoload.php');
+require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readable/constants.php');
 
 
 /**
  * Class for calculating various readability scores.
  *
- * @package    metadataextractor_readability
+ * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -58,9 +58,9 @@ class calculator {
      * @return int $averagespeed the average reading speed in words per minute.
      */
     public function get_average_reading_speed() {
-        $config = get_config('metadataextractor_readability', 'average_reading_speed');
+        $config = get_config('metadataextractor_readable', 'average_reading_speed');
         if (empty($config) || $config < 0) {
-            $averagespeed = METADATAEXTRACTOR_READABILITY_DEFAULT_READING_SPEED;
+            $averagespeed = METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED;
         } else {
             $averagespeed = $config;
         }
@@ -97,19 +97,19 @@ class calculator {
     public function calculate_scores(string $text) : array{
         $results = [];
 
-        $results[METADATAEXTRACTOR_READABILITY_FK_READING_EASE] = $this->textstatistics->fleschKincaidReadingEase($text);
-        $results[METADATAEXTRACTOR_READABILITY_FK_GRADE_LEVEL] = $this->textstatistics->fleschKincaidGradeLevel($text);
-        $results[METADATAEXTRACTOR_READABILITY_GUNNING_FOG] = $this->textstatistics->gunningFogScore($text);
-        $results[METADATAEXTRACTOR_READABILITY_COLEMAN_LIAU] = $this->textstatistics->colemanLiauIndex($text);
-        $results[METADATAEXTRACTOR_READABILITY_SMOG_INDEX] = $this->textstatistics->smogIndex($text);
-        $results[METADATAEXTRACTOR_READABILITY_AUTOMATED_READABILITY] = $this->textstatistics->automatedReadabilityIndex($text);
-        $results[METADATAEXTRACTOR_READABILITY_DC_READABILITY] = $this->textstatistics->daleChallReadabilityScore($text);
-        $results[METADATAEXTRACTOR_READABILITY_DC_DIFFICULT_WORDCOUNT] = $this->textstatistics->daleChallDifficultWordCount($text);
-        $results[METADATAEXTRACTOR_READABILITY_SPACHE_READABILITY] = $this->textstatistics->spacheReadabilityScore($text);
-        $results[METADATAEXTRACTOR_READABILITY_SPACHE_DIFFICULT_WORDCOUNT] = $this->textstatistics->spacheDifficultWordCount($text);
-        $results[METADATAEXTRACTOR_READABILITY_WORDCOUNT] = $this->textstatistics->wordCount($text);
-        $results[METADATAEXTRACTOR_READABILITY_WORDS_PER_SENTENCE] = round($this->textstatistics->averageWordsPerSentence($text), 2);
-        $results[METADATAEXTRACTOR_READABILITY_READING_TIME] = $this->calculate_reading_time($text);
+        $results[METADATAEXTRACTOR_READABLE_FK_READING_EASE] = $this->textstatistics->fleschKincaidReadingEase($text);
+        $results[METADATAEXTRACTOR_READABLE_FK_GRADE_LEVEL] = $this->textstatistics->fleschKincaidGradeLevel($text);
+        $results[METADATAEXTRACTOR_READABLE_GUNNING_FOG] = $this->textstatistics->gunningFogScore($text);
+        $results[METADATAEXTRACTOR_READABLE_COLEMAN_LIAU] = $this->textstatistics->colemanLiauIndex($text);
+        $results[METADATAEXTRACTOR_READABLE_SMOG_INDEX] = $this->textstatistics->smogIndex($text);
+        $results[METADATAEXTRACTOR_READABLE_AUTOMATED_READABILITY] = $this->textstatistics->automatedReadabilityIndex($text);
+        $results[METADATAEXTRACTOR_READABLE_DC_READABILITY] = $this->textstatistics->daleChallReadabilityScore($text);
+        $results[METADATAEXTRACTOR_READABLE_DC_DIFFICULT_WORDCOUNT] = $this->textstatistics->daleChallDifficultWordCount($text);
+        $results[METADATAEXTRACTOR_READABLE_SPACHE_READABILITY] = $this->textstatistics->spacheReadabilityScore($text);
+        $results[METADATAEXTRACTOR_READABLE_SPACHE_DIFFICULT_WORDCOUNT] = $this->textstatistics->spacheDifficultWordCount($text);
+        $results[METADATAEXTRACTOR_READABLE_WORDCOUNT] = $this->textstatistics->wordCount($text);
+        $results[METADATAEXTRACTOR_READABLE_WORDS_PER_SENTENCE] = round($this->textstatistics->averageWordsPerSentence($text), 2);
+        $results[METADATAEXTRACTOR_READABLE_READING_TIME] = $this->calculate_reading_time($text);
 
         return $results;
     }

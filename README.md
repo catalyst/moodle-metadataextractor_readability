@@ -1,4 +1,4 @@
-# Readability metadata extractor
+# Readable metadata extractor
 
 This is a Moodle Metadata API (`tool_metadata`) subplugin designed to create readability metadata for Moodle resources using Dave Child's [Text-Statistics API](https://github.com/DaveChild/Text-Statistics)
 

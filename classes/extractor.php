@@ -17,25 +17,25 @@
 /**
  * Class for extraction of readability metadata.
  *
- * @package    metadataextractor_readability
+ * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace metadataextractor_readability;
+namespace metadataextractor_readable;
 
 use stored_file;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/vendor/autoload.php');
-require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/constants.php');
+require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readable/vendor/autoload.php');
+require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readable/constants.php');
 
 /**
  * Class for extraction of readability metadata.
  *
- * @package    metadataextractor_readability
+ * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -44,12 +44,12 @@ class extractor extends \tool_metadata\extractor {
     /**
      * The plugin name.
      */
-    const METADATAEXTRACTOR_NAME = 'readability';
+    const METADATAEXTRACTOR_NAME = 'readable';
 
     /**
      * Default table name for storing extracted metadata for this extractor.
      */
-    const METADATA_BASE_TABLE = 'metadataextractor_readability';
+    const METADATA_BASE_TABLE = 'metadataextractor_readable';
 
     /**
      * Attempt to extract url readability metadata.
