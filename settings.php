@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/constants.php');
+
 if ($hassiteconfig) {
 
     $settings->add(new admin_setting_heading('metadataextractor_readability/readabilitysettings',
