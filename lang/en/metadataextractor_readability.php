@@ -25,4 +25,6 @@
 $string['pluginname'] = 'Readability';
 
 // Settings strings.
+$string['settings:averagereadingspeed'] = 'Average reading speed';
+$string['settings:averagereadingspeed_help'] = 'The average reading speed used in readability calculations (words per minute).';
 $string['settings:heading'] = 'Readability settings';
