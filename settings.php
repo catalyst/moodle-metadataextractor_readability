@@ -26,7 +26,11 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
 
-    $settings->add(new admin_setting_heading('metadataextractor_tika/readabilitysettings',
+    $settings->add(new admin_setting_heading('metadataextractor_readability/readabilitysettings',
         get_string('settings:heading', 'metadataextractor_readability'), ''));
 
+    $settings->add(new admin_setting_configtext('metadataextractor_readability/average_reading_speed',
+        get_string('settings:averagereadingspeed', 'metadataextractor_readability'),
+        get_string('settings:averagereadingspeed_help', 'metadataextractor_readability'),
+        METADATAEXTRACTOR_READABILITY_DEFAULT_READING_SPEED, PARAM_INT, 4));
 }
