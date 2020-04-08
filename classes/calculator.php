@@ -26,6 +26,7 @@ namespace metadataextractor_readability;
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
 require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/vendor/autoload.php');
 require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readability/constants.php');
 
