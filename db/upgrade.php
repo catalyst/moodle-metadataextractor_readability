@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Upgrade database for metadataextractor_readable.
  *
  * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
@@ -24,10 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020040801;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2019052003;        // Requires this Moodle version
-$plugin->component = 'metadataextractor_readable';        // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_ALPHA;
+function xmldb_metadataextractor_readable_upgrade($oldversion) {
 
-$plugin->dependencies = array('tool_metadata' => 2020040201);
-$plugin->dependencies = array('metadataextractor_tika' => 2020032601);
+    return true;
+}
