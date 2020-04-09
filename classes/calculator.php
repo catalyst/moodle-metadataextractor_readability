@@ -73,16 +73,29 @@ class calculator {
      *
      * @param string $text the text to be measured.
      *
-     * @return string $formattedtime a formatted reading time HH:MM:SS
+     * @return int $seconds reading time in seconds.
      */
-    public function calculate_reading_time(string $text) : string {
+    public function calculate_reading_time(string $text) : int {
 
-        $decimaltime = $this->textstatistics->wordCount($text) / $this->get_average_reading_speed();
-        $hours = floor($decimaltime / 60);
-        $minutes = floor($decimaltime % 60);
-        $seconds = ($decimaltime - floor($decimaltime)) * 60;
+        $minutes = $this->textstatistics->wordCount($text) / $this->get_average_reading_speed();
+        $seconds = (int) floor($minutes * 60);
 
-        $formattedtime = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
+        return $seconds;
+    }
+
+    /**
+     * Get time in seconds as formatted string of HH:MM:SS.
+     *
+     * @param int $time the time to format in seconds.
+     *
+     * @return string a formatted string of hours, minutes and seconds separated by colons - 'HH:MM:SS'.
+     */
+    public function format_time(int $time) {
+        $hours = floor($time / 3600);
+        $minutes = floor(($time % 3600) / 60);
+        $seconds = ($time - (3600 * $hours) - (60 * $minutes));
+
+        $formattedtime = sprintf("%d:%02d:%02d", $hours, $minutes, $seconds);
 
         return $formattedtime;
     }
@@ -108,7 +121,7 @@ class calculator {
         $results[METADATAEXTRACTOR_READABLE_SPACHE_READABILITY] = $this->textstatistics->spacheReadabilityScore($text);
         $results[METADATAEXTRACTOR_READABLE_SPACHE_DIFFICULT_WORDCOUNT] = $this->textstatistics->spacheDifficultWordCount($text);
         $results[METADATAEXTRACTOR_READABLE_WORDCOUNT] = $this->textstatistics->wordCount($text);
-        $results[METADATAEXTRACTOR_READABLE_WORDS_PER_SENTENCE] = round($this->textstatistics->averageWordsPerSentence($text), 2);
+        $results[METADATAEXTRACTOR_READABLE_WORDS_PER_SENTENCE] = round($this->textstatistics->averageWordsPerSentence($text), 1);
         $results[METADATAEXTRACTOR_READABLE_READING_TIME] = $this->calculate_reading_time($text);
 
         return $results;

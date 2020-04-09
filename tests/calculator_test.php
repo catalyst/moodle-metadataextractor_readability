@@ -41,6 +41,22 @@ class calculator_test extends advanced_testcase {
     }
 
     /**
+     * Create a text string of specified wordcount.
+     *
+     * @param int $wordcount the wordcount of text to create.
+     *
+     * @return string $text test text.
+     */
+    protected function create_test_text(int $wordcount) : string {
+        $text = '';
+        for($i = 0; $i < $wordcount; $i++) {
+            $text .= ' test';
+        }
+
+        return $text;
+    }
+
+    /**
      * Test getting the average reading speed for use in calculations.
      */
     public function test_get_average_reading_speed() {
@@ -63,46 +79,73 @@ class calculator_test extends advanced_testcase {
      */
     public function calculate_reading_time_provider() {
         return [
-            '500 words - No reading time set' => [500, 0, 0, 2, 6],
-            '500 words - Default reading time set' => [500, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 0, 2, 6],
-            '500 words - Custom reading time set' => [500, 400, 0, 1, 15],
-            '5000 words - No reading time set' => [5000, 0, 0, 21, 0],
-            '5000 words - Default reading time set' => [5000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 0, 21, 0],
-            '5000 words - Custom reading time set' => [5000, 400, 0, 12, 30],
-            '50000 words - No reading time set' => [50000, 0, 3, 30, 5],
-            '50000 words - Default reading time set' => [50000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 3, 30, 5],
-            '50000 words - Custom reading time set' => [50000, 400, 2, 5, 0],
+            '500 words - No reading time set' => [500, 0, 126, 0, 2, 6],
+            '500 words - Default reading time set' => [500, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 126, 0, 2, 6],
+            '500 words - Custom reading time set' => [500, 400, 75, 0, 1, 15],
+            '5000 words - No reading time set' => [5000, 0, 1260, 0, 21, 0],
+            '5000 words - Default reading time set' => [5000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 1260, 0, 21, 0],
+            '5000 words - Custom reading time set' => [5000, 400, 750, 0, 12, 30],
+            '50000 words - No reading time set' => [50000, 0, 12605, 3, 30, 5],
+            '50000 words - Default reading time set' => [50000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 12605, 3, 30, 5],
+            '50000 words - Custom reading time set' => [50000, 400, 7500, 2, 5, 0],
+            '500000 words - No reading time set' => [500000, 0, 126050, 35, 0, 50],
+            '500000 words - Default reading time set' => [500000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 126050, 35, 0, 50],
+            '500000 words - Custom reading time set' => [500000, 400, 75000, 20, 50, 0]
         ];
     }
 
     /**
-     * Test the calculation of reading times
+     * Test calculating reading time in seconds of text.
      *
      * @dataProvider calculate_reading_time_provider
      *
      * @param int $wordcount word count to test
      * @param int $averagereadingspeed average reading time set
+     * @param int $totalseconds expected reading time in seconds
+     */
+    public function test_calculate_reading_time($wordcount, $averagereadingspeed, $expected) {
+        set_config('average_reading_speed', $averagereadingspeed, 'metadataextractor_readable');
+
+        // Generate test text of required wordcount.
+        $text = $this->create_test_text($wordcount);
+
+        $calculator = new \metadataextractor_readable\calculator();
+        $actual = $calculator->calculate_reading_time($text);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test the formatting of a reading time.
+     *
+     * @dataProvider calculate_reading_time_provider
+     *
+     * @param int $wordcount word count to test
+     * @param int $averagereadingspeed average reading time set
+     * @param int $totalseconds expected reading time in seconds
      * @param int $hours expected hours to read
      * @param int $minutes expected minutes to read
      * @param int $seconds expected seconds to read
      */
-    public function test_calculate_reading_time($wordcount, $averagereadingspeed, $hours, $minutes, $seconds) {
+    public function test_format_reading_time($wordcount, $averagereadingspeed, $totalseconds, $hours, $minutes, $seconds) {
         set_config('average_reading_speed', $averagereadingspeed, 'metadataextractor_readable');
 
         // Generate test text of required wordcount.
-        $text = '';
-        for($i = 0; $i < $wordcount; $i++) {
-            $text .= ' test';
-        }
+        $text = $this->create_test_text($wordcount);
 
         $calculator = new \metadataextractor_readable\calculator();
         $readingtime = $calculator->calculate_reading_time($text);
+        $formattedtime = $calculator->format_time($readingtime);
 
-        $actual = explode(':', $readingtime);
+        $actual = explode(':', $formattedtime);
+        $actualhours = $actual[0];
+        $actualminutes = $actual[1];
+        $actualseconds = $actual[2];
 
-        $this->assertEquals($hours, $actual[0]);
-        $this->assertEquals($minutes, $actual[1]);
-        $this->assertEquals($seconds, $actual[2]);
+        $this->assertEquals($hours, $actualhours);
+        $this->assertEquals($minutes, $actualminutes);
+        $this->assertEquals($seconds, $actualseconds);
+        $this->assertEquals($totalseconds, ($actualhours * 3600) + ($actualminutes * 60) + ($actualseconds));
     }
 
 }
