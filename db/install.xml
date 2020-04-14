@@ -18,6 +18,7 @@
         <FIELD NAME="dalechalldifficultwordcount" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="spachereadabilityscore" TYPE="number" LENGTH="5" NOTNULL="false" SEQUENCE="false" DECIMALS="1"/>
         <FIELD NAME="spachedifficultwordcount" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="wordcount" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="averagewordspersentence" TYPE="number" LENGTH="5" NOTNULL="false" SEQUENCE="false" DECIMALS="1"/>
         <FIELD NAME="readingtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Reading time in seconds"/>
       </FIELDS>
