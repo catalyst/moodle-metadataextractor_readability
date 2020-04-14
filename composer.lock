@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54ebc022aff749e376fe51a4e17a475b",
+    "content-hash": "c35ae405359438cbdff5b8eac40d7acc",
     "packages": [
         {
             "name": "davechild/textstatistics",
@@ -64,6 +64,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.2.0"
+    },
     "platform-dev": []
 }
