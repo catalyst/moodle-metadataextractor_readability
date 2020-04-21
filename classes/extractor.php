@@ -62,17 +62,20 @@ class extractor extends \tool_metadata\extractor {
      * @throws \tool_metadata\extraction_exception
      */
     public function extract_file_metadata(stored_file $file) {
+        $metadata = null;
         $tikaextractor = new \metadataextractor_tika\extractor();
+
         if ($tikaextractor->is_ready()) {
             $contents = $tikaextractor->extract_file_content($file);
         } else {
             throw new extraction_exception('error:dependency:tika:content', 'metadataextractor_readable');
         }
 
-        $calculator = new calculator();
-        $scores = $calculator->calculate_scores($contents);
-
-        $metadata = new metadata(0, \tool_metadata\helper::get_resourcehash($file, TOOL_METADATA_RESOURCE_TYPE_FILE), $scores);
+        if (!empty($contents)) {
+            $calculator = new calculator();
+            $scores = $calculator->calculate_scores($contents);
+            $metadata = new metadata(0, \tool_metadata\helper::get_resourcehash($file, TOOL_METADATA_RESOURCE_TYPE_FILE), $scores);
+        }
 
         return $metadata;
     }
@@ -86,17 +89,20 @@ class extractor extends \tool_metadata\extractor {
      * @throws \tool_metadata\extraction_exception
      */
     public function extract_url_metadata($url) {
+        $metadata = null;
         $tikaextractor = new \metadataextractor_tika\extractor();
+
         if ($tikaextractor->is_ready()) {
             $contents = $tikaextractor->extract_url_content($url);
         } else {
             throw new extraction_exception('error:dependency:tika:content', 'metadataextractor_readable');
         }
 
-        $calculator = new calculator();
-        $scores = $calculator->calculate_scores($contents);
-
-        $metadata = new metadata(0, \tool_metadata\helper::get_resourcehash($url, TOOL_METADATA_RESOURCE_TYPE_URL), $scores);
+        if (!empty($contents)) {
+            $calculator = new calculator();
+            $scores = $calculator->calculate_scores($contents);
+            $metadata = new metadata(0, \tool_metadata\helper::get_resourcehash($url, TOOL_METADATA_RESOURCE_TYPE_URL), $scores);
+        }
 
         return $metadata;
     }
