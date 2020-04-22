@@ -49,7 +49,7 @@ class calculator_test extends advanced_testcase {
      */
     protected function create_test_text(int $wordcount) : string {
         $text = '';
-        for($i = 0; $i < $wordcount; $i++) {
+        for ($i = 0; $i < $wordcount; $i++) {
             $text .= ' test';
         }
 
@@ -79,18 +79,30 @@ class calculator_test extends advanced_testcase {
      */
     public function calculate_reading_time_provider() {
         return [
-            '500 words - No reading time set' => [500, 0, 126, 0, 2, 6],
-            '500 words - Default reading time set' => [500, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 126, 0, 2, 6],
-            '500 words - Custom reading time set' => [500, 400, 75, 0, 1, 15],
-            '5000 words - No reading time set' => [5000, 0, 1260, 0, 21, 0],
-            '5000 words - Default reading time set' => [5000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 1260, 0, 21, 0],
-            '5000 words - Custom reading time set' => [5000, 400, 750, 0, 12, 30],
-            '50000 words - No reading time set' => [50000, 0, 12605, 3, 30, 5],
-            '50000 words - Default reading time set' => [50000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 12605, 3, 30, 5],
-            '50000 words - Custom reading time set' => [50000, 400, 7500, 2, 5, 0],
-            '500000 words - No reading time set' => [500000, 0, 126050, 35, 0, 50],
-            '500000 words - Default reading time set' => [500000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 126050, 35, 0, 50],
-            '500000 words - Custom reading time set' => [500000, 400, 75000, 20, 50, 0]
+            '500 words - No reading time set' =>
+                [500, 0, 126, 0, 2, 6],
+            '500 words - Default reading time set' =>
+                [500, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 126, 0, 2, 6],
+            '500 words - Custom reading time set' =>
+                [500, 400, 75, 0, 1, 15],
+            '5000 words - No reading time set' =>
+                [5000, 0, 1260, 0, 21, 0],
+            '5000 words - Default reading time set' =>
+                [5000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 1260, 0, 21, 0],
+            '5000 words - Custom reading time set' =>
+                [5000, 400, 750, 0, 12, 30],
+            '50000 words - No reading time set' =>
+                [50000, 0, 12605, 3, 30, 5],
+            '50000 words - Default reading time set' =>
+                [50000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 12605, 3, 30, 5],
+            '50000 words - Custom reading time set' =>
+                [50000, 400, 7500, 2, 5, 0],
+            '500000 words - No reading time set' =>
+                [500000, 0, 126050, 35, 0, 50],
+            '500000 words - Default reading time set' =>
+                [500000, METADATAEXTRACTOR_READABLE_DEFAULT_READING_SPEED, 126050, 35, 0, 50],
+            '500000 words - Custom reading time set' =>
+                [500000, 400, 75000, 20, 50, 0]
         ];
     }
 
@@ -101,7 +113,7 @@ class calculator_test extends advanced_testcase {
      *
      * @param int $wordcount word count to test
      * @param int $averagereadingspeed average reading time set
-     * @param int $totalseconds expected reading time in seconds
+     * @param int $expected expected reading time in seconds
      */
     public function test_calculate_reading_time($wordcount, $averagereadingspeed, $expected) {
         set_config('average_reading_speed', $averagereadingspeed, 'metadataextractor_readable');

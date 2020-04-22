@@ -67,8 +67,8 @@ class readable_helper {
      *
      * @return string $mimetype the 'type/subtype' of MIME type.
      */
-    public static function get_mimetype_without_parameters(string $contenttype) {
-        $parts = explode(';', $contenttype);
+    public static function get_mimetype_without_parameters(string $mimetype) {
+        $parts = explode(';', $mimetype);
         $mimetype = trim($parts[0]);
 
         return $mimetype;

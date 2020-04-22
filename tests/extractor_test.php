@@ -48,10 +48,7 @@ class extractor_test extends advanced_testcase {
     }
 
     public function test_extract_file_metadata() {
-        [$unused, $resource] = mock_file_builder::mock_pdf();
-        $extractor = new \metadataextractor_readable\extractor();
 
-        $data = $extractor->extract_metadata($resource, TOOL_METADATA_RESOURCE_TYPE_FILE);
     }
 
     public function test_extract_url_metadata() {

@@ -24,7 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_metadataextractor_readable_upgrade($oldversion) {
+/**
+ * Upgrade script for metadataextractor_readable.
+ *
+ * @param int $oldversion the version upgrading from.
+ *
+ * @return bool always true.
+ */
+function xmldb_metadataextractor_readable_upgrade(int $oldversion) {
 
     return true;
 }
