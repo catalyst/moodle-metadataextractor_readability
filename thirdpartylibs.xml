@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<libraries>
+    <library>
+        <location>vendor</location>
+        <name>Composer</name>
+        <version>1.10.5</version>
+        <license>MIT</license>
+        <licenseversion>1.0</licenseversion>
+    </library>
+    <library>
+        <location>vendor/davechild</location>
+        <name>Dave Child's TextStatistics</name>
+        <version>1.0.2</version>
+        <license>BSD</license>
+        <licenseversion>2-Clause</licenseversion>
+    </library>
+</libraries>
