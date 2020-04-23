@@ -33,6 +33,7 @@ require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readable/constants.
  * @package    metadataextractor_readable
  * @copyright  2020 Tom Dickman <tomdickman@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @group      metadataextractor_readable
  */
 class calculator_test extends advanced_testcase {
 
@@ -158,6 +159,120 @@ class calculator_test extends advanced_testcase {
         $this->assertEquals($minutes, $actualminutes);
         $this->assertEquals($seconds, $actualseconds);
         $this->assertEquals($totalseconds, ($actualhours * 3600) + ($actualminutes * 60) + ($actualseconds));
+    }
+
+    /**
+     * Provider for testing text cleaning for calculations.
+     *
+     * @return array string[][]
+     */
+    public function clean_text_for_calculation_provider() {
+        return [
+            'Tabs should be replaced with spaces' =>
+                ['tabs	should	be	replaced', 'tabs should be replaced'],
+            'Multiple spaces should be replaces with single spaces' =>
+                ['multiple  spaces   replaced', 'multiple spaces replaced']
+        ];
+    }
+
+    /**
+     * Test cleaning text for calculations.
+     *
+     * @dataProvider clean_text_for_calculation_provider
+     *
+     * @param string $dirtytext
+     * @param string $cleantext
+     */
+    public function test_clean_text_for_calculation(string $dirtytext, string $cleantext) {
+        $calculator = new \metadataextractor_readable\calculator();
+
+        $this->assertEquals($cleantext, $calculator->clean_text_for_calculation($dirtytext));
+    }
+
+    /**
+     * Provider for testing calculation of scores.
+     *
+     * @return array[]
+     */
+    public function calculate_scores_provider() {
+        return [
+            'High complexity' => [
+                'A hard word to read is chlorofluorocarbonation. Others I can learn include'
+                    . ' antidisestablishmentarianism, chlorofluorocarbonation and phosphorescent.',
+                [
+                    'fleschkincaidreadingease' => 0,
+                    'fleschkincaidgradelevel' => 12,
+                    'gunningfogscore' => 13.2,
+                    'colemanliauindex' => 12,
+                    'smogindex' => 11.3,
+                    'automatedreadabilityindex' => 12,
+                    'dalechallreadabilityscore' => 5.3,
+                    'dalechalldifficultwordcount' => 5,
+                    'spachereadabilityscore' => 2,
+                    'spachedifficultwordcount' => 4,
+                    'wordcount' => 16,
+                    'averagewordspersentence' => 8,
+                    'readingtime' => 4,
+                ]
+            ],
+            'Moderate complexity' => [
+                'A medium word to read is delicious. Others I can learn include'
+                    . ' audience, presence and alien.',
+                [
+                    'fleschkincaidreadingease' => 56,
+                    'fleschkincaidgradelevel' => 7.4,
+                    'gunningfogscore' => 13.2,
+                    'colemanliauindex' => 11.4,
+                    'smogindex' => 11.3,
+                    'automatedreadabilityindex' => 4.4,
+                    'dalechallreadabilityscore' => 6.3,
+                    'dalechalldifficultwordcount' => 6,
+                    'spachereadabilityscore' => 2.1,
+                    'spachedifficultwordcount' => 6,
+                    'wordcount' => 16,
+                    'averagewordspersentence' => 8,
+                    'readingtime' => 4,
+                ]
+            ],
+            'Low complexity' => [
+                'An easy word to read is deal. Others I can learn are'
+                    . ' make, gem and the.',
+                [
+                    'fleschkincaidreadingease' => 100,
+                    'fleschkincaidgradelevel' => 0.8,
+                    'gunningfogscore' => 3.2,
+                    'colemanliauindex' => 3.7,
+                    'smogindex' => 3.3,
+                    'automatedreadabilityindex' => 0,
+                    'dalechallreadabilityscore' => 1.4,
+                    'dalechalldifficultwordcount' => 1,
+                    'spachereadabilityscore' => 1.8,
+                    'spachedifficultwordcount' => 2,
+                    'wordcount' => 16,
+                    'averagewordspersentence' => 8,
+                    'readingtime' => 4,
+                ]
+            ]
+        ];
+    }
+
+
+    /**
+     * Test calculating scores.
+     *
+     * @dataProvider calculate_scores_provider
+     *
+     * @param string $text the test text.
+     * @param array $expectedscores the expected scores.
+     */
+    public function test_calculate_scores(string $text, array $expectedscores) {
+        $calculator = new \metadataextractor_readable\calculator();
+
+        $actualscores = $calculator->calculate_scores($text);
+
+        foreach ($actualscores as $name => $value) {
+            $this->assertEquals($expectedscores[$name], $value);
+        }
     }
 
 }

@@ -93,7 +93,7 @@ class calculator {
      *
      * @return string $text the cleaned text.
      */
-    protected function clean_text_for_calculation(string $text) {
+    public function clean_text_for_calculation(string $text) {
         // Patterns in order of replacement priority.
         $patterns = [
             '\t' => ' ', // Tabs.

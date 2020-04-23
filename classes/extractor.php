@@ -132,12 +132,16 @@ class extractor extends \tool_metadata\extractor {
                 $ishttp = (bool) preg_match('/^https?:\/\//i', $resource->externalurl);
                 $validurl = url_appears_valid_url($resource->externalurl);
 
-                $tikaextractor = new \metadataextractor_tika\extractor();
-                $rawmimetype = $tikaextractor->extract_url_mimetype($resource);
-                if (!empty($rawmimetype)) {
-                    $mimetype = readable_helper::get_mimetype_without_parameters($rawmimetype);
-                    $supportedurl = readable_helper::is_mimetype_supported($mimetype);
-                } else {
+                try {
+                    $tikaextractor = new \metadataextractor_tika\extractor();
+                    $rawmimetype = $tikaextractor->extract_url_mimetype($resource);
+                    if (!empty($rawmimetype)) {
+                        $mimetype = readable_helper::get_mimetype_without_parameters($rawmimetype);
+                        $supportedurl = readable_helper::is_mimetype_supported($mimetype);
+                    } else {
+                        $supportedurl = false;
+                    }
+                } catch (extraction_exception $exception) {
                     $supportedurl = false;
                 }
 
