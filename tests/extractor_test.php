@@ -84,8 +84,13 @@ class extractor_test extends advanced_testcase {
                 $this->assertInstanceOf(\tool_metadata\extraction_exception::class, $exception);
             }
         } else {
-            $actual = $extractor->validate_resource($url, TOOL_METADATA_RESOURCE_TYPE_URL);
-            $this->assertTrue($actual);
+            try {
+                $actual = $extractor->validate_resource($url, TOOL_METADATA_RESOURCE_TYPE_URL);
+                $this->assertTrue($actual);
+            } catch (\Exception $exception) {
+                // Network errors should throw an exception, as we can't validate URL without network.
+                $this->assertInstanceOf(\tool_metadata\network_exception::class, $exception);
+            }
         }
 
         // Set URL to an invalid value.
@@ -99,8 +104,13 @@ class extractor_test extends advanced_testcase {
                 $this->assertInstanceOf(\tool_metadata\extraction_exception::class, $exception);
             }
         } else {
-            $actual = $extractor->validate_resource($url, TOOL_METADATA_RESOURCE_TYPE_URL);
-            $this->assertFalse($actual);
+            try {
+                $actual = $extractor->validate_resource($url, TOOL_METADATA_RESOURCE_TYPE_URL);
+                $this->assertFalse($actual);
+            } catch (\Exception $exception) {
+                // Network errors should throw an exception, as we can't validate URL without network.
+                $this->assertInstanceOf(\tool_metadata\network_exception::class, $exception);
+            }
         }
     }
 

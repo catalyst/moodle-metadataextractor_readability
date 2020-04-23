@@ -26,6 +26,7 @@ namespace metadataextractor_readable;
 
 use stored_file;
 use tool_metadata\extraction_exception;
+use tool_metadata\network_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -68,7 +69,7 @@ class extractor extends \tool_metadata\extractor {
         if ($tikaextractor->is_ready()) {
             $contents = $tikaextractor->extract_file_content($file);
         } else {
-            throw new extraction_exception('error:dependency:tika:content', 'metadataextractor_readable');
+            throw new extraction_exception('error:dependency:tika', 'metadataextractor_readable');
         }
 
         if (!empty($contents)) {
@@ -95,7 +96,7 @@ class extractor extends \tool_metadata\extractor {
         if ($tikaextractor->is_ready()) {
             $contents = $tikaextractor->extract_url_content($url);
         } else {
-            throw new extraction_exception('error:dependency:tika:content', 'metadataextractor_readable');
+            throw new extraction_exception('error:dependency:tika', 'metadataextractor_readable');
         }
 
         if (!empty($contents)) {
@@ -132,8 +133,12 @@ class extractor extends \tool_metadata\extractor {
                 $ishttp = (bool) preg_match('/^https?:\/\//i', $resource->externalurl);
                 $validurl = url_appears_valid_url($resource->externalurl);
 
+                $tikaextractor = new \metadataextractor_tika\extractor();
+                if (!$tikaextractor->is_ready()) {
+                    throw new extraction_exception('error:dependency:tika', 'metadataextractor_readable');
+                }
+
                 try {
-                    $tikaextractor = new \metadataextractor_tika\extractor();
                     $rawmimetype = $tikaextractor->extract_url_mimetype($resource);
                     if (!empty($rawmimetype)) {
                         $mimetype = readable_helper::get_mimetype_without_parameters($rawmimetype);
@@ -142,7 +147,13 @@ class extractor extends \tool_metadata\extractor {
                         $supportedurl = false;
                     }
                 } catch (extraction_exception $exception) {
-                    $supportedurl = false;
+                    // If this failed due to a network exception, the URL may be supported but was
+                    // unable to be assessed at this time, so rethrow the network exception.
+                    if ($exception instanceof network_exception) {
+                        throw $exception;
+                    } else {
+                        $supportedurl = false;
+                    }
                 }
 
                 if (!$ishttp || !$validurl || !$supportedurl) {

@@ -25,7 +25,7 @@
 $string['pluginname'] = 'Readability';
 
 // Error strings.
-$string['error:dependency:tika:content'] = 'metadataextractor_tika is unable to extract content, check settings.';
+$string['error:dependency:tika'] = 'metadataextractor_tika is unable to extract content, check settings.';
 
 // Settings strings.
 $string['settings:averagereadingspeed'] = 'Average reading speed';
