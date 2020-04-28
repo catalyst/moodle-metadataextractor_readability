@@ -83,7 +83,9 @@ class readable_helper {
      * @return bool
      */
     public static function is_mimetype_supported(string $mimetype) : bool {
-        if (in_array($mimetype, static::METADATAEXTRACTOR_READABLE_SUPPORTED_MIMETYPES)) {
+        if (empty($mimetype)) {
+            $result = false;
+        } else if (in_array($mimetype, static::METADATAEXTRACTOR_READABLE_SUPPORTED_MIMETYPES)) {
             $result = true;
         } else {
             $result = false;

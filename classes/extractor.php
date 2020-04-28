@@ -118,25 +118,50 @@ class extractor extends \tool_metadata\extractor {
      * @throws \tool_metadata\extraction_exception when there is a networking issue and URL cannot be resolved.
      */
     public function validate_resource($resource, string $type) : bool {
+
+        // Require metadataextractor_tika for mimetype coercion.
+        $tikaextractor = new \metadataextractor_tika\extractor();
+
         switch($type) {
             // File resource cannot be directories.
             case TOOL_METADATA_RESOURCE_TYPE_FILE :
-                $mimetype = $resource->get_mimetype();
-                if ($resource->is_directory() || !readable_helper::is_mimetype_supported($mimetype)) {
+                if ($resource->is_directory()) {
                     $result = false;
                 } else {
-                    $result = true;
+                    $mimetype = $resource->get_mimetype();
+
+                    if (empty($mimetype)) {
+                        if ($tikaextractor->is_ready()) {
+                            // Could not coerce mimetype from stored_file, attempt to coerse using Tika.
+                            try {
+                                $mimetype = $tikaextractor->extract_file_mimetype($resource);
+                            }
+                            catch (extraction_exception $exception) {
+                                // If this failed due to a network exception, the file may be supported but mimetype
+                                // was unable to be assessed at this time, so rethrow the network exception.
+                                if ($exception instanceof network_exception) {
+                                    throw $exception;
+                                } else {
+                                    $mimetype = null;
+                                }
+                            }
+                        } else {
+                            throw new extraction_exception('error:dependency:tika', 'metadataextractor_readable');
+                        }
+                    }
+
+                    $result = readable_helper::is_mimetype_supported($mimetype);
                 }
                 break;
             // Only support valid HTTP(S) URLs and URLs for which the content is of a supported mimetype.
             case TOOL_METADATA_RESOURCE_TYPE_URL :
-                $ishttp = (bool) preg_match('/^https?:\/\//i', $resource->externalurl);
-                $validurl = url_appears_valid_url($resource->externalurl);
 
-                $tikaextractor = new \metadataextractor_tika\extractor();
                 if (!$tikaextractor->is_ready()) {
                     throw new extraction_exception('error:dependency:tika', 'metadataextractor_readable');
                 }
+
+                $ishttp = (bool) preg_match('/^https?:\/\//i', $resource->externalurl);
+                $validurl = url_appears_valid_url($resource->externalurl);
 
                 try {
                     $rawmimetype = $tikaextractor->extract_url_mimetype($resource);
