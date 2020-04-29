@@ -135,8 +135,7 @@ class extractor extends \tool_metadata\extractor {
                             // Could not coerce mimetype from stored_file, attempt to coerse using Tika.
                             try {
                                 $mimetype = $tikaextractor->extract_file_mimetype($resource);
-                            }
-                            catch (extraction_exception $exception) {
+                            } catch (extraction_exception $exception) {
                                 // If this failed due to a network exception, the file may be supported but mimetype
                                 // was unable to be assessed at this time, so rethrow the network exception.
                                 if ($exception instanceof network_exception) {
