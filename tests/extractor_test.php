@@ -48,9 +48,10 @@ class extractor_test extends advanced_testcase {
      * Test validating a file resource.
      */
     public function test_validate_resource_file() {
+        global $DB;
 
         // Create a test file.
-        [$metadata, $file] = mock_file_builder::mock_document();
+        [$unused, $file] = mock_file_builder::mock_document();
 
         // Create a test directory.
         $fs = get_file_storage();
@@ -61,6 +62,30 @@ class extractor_test extends advanced_testcase {
 
         $this->assertTrue($extractor->validate_resource($file, TOOL_METADATA_RESOURCE_TYPE_FILE));
         $this->assertFalse($extractor->validate_resource($directory, TOOL_METADATA_RESOURCE_TYPE_FILE));
+
+        // Set a null value in the file record for mimetype.
+        $fileid = $file->get_id();
+        $DB->update_record('files', ['id' => $fileid, 'mimetype' => null]);
+        $file = $fs->get_file_by_id($fileid);
+
+        // If stored_file has no mimetype should fall back to Tika coerced mimetype.
+        $tikaextractor = new \metadataextractor_tika\extractor();
+        if (!$tikaextractor->is_ready()) {
+            try {
+                $extractor->validate_resource($file, TOOL_METADATA_RESOURCE_TYPE_FILE);
+                $this->fail('Should require configured metadataextractor_tika for coercing the mimetype of a file in fallback.');
+            } catch (\Exception $exception) {
+                $this->assertInstanceOf(\tool_metadata\extraction_exception::class, $exception);
+            }
+        } else {
+            try {
+                $actual = $extractor->validate_resource($file, TOOL_METADATA_RESOURCE_TYPE_FILE);
+                $this->assertTrue($actual);
+            } catch (\Exception $exception) {
+                // Network errors should throw an exception, as we can't coerce mimetype without network.
+                $this->assertInstanceOf(\tool_metadata\network_exception::class, $exception);
+            }
+        }
     }
 
     /**
