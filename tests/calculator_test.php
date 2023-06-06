@@ -37,7 +37,7 @@ require_once($CFG->dirroot . '/admin/tool/metadata/extractor/readable/constants.
  */
 class calculator_test extends advanced_testcase {
 
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest();
     }
 
